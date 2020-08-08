@@ -1,9 +1,9 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 import os
+from flask_migrate import Migrate
 # local imports
 from config import app_config
-from flask_migrate import Migrate
 
 db = SQLAlchemy()
 app = Flask(__name__, instance_relative_config=False)
