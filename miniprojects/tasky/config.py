@@ -28,4 +28,3 @@ app_config = {
     'development': DevelopmentConfig,
     'production': ProductionConfig
 }
-# SQLALCHEMY_DATABASE_URI = 'mysql://badri:password''@daily-learning.ctjanlzgevpi.ap-south-1.rds.amazonaws.com:3306/daily_learning'
