@@ -6,5 +6,5 @@
 /__pycache__/
 /migrations/
 .tasky.db
-/tasky/__pycache__/
+tasky/__pycache__/
 
