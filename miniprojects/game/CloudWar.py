@@ -11,7 +11,7 @@ def main():
     class Defender(pygame.sprite.Sprite):
         def __init__(self):
             super(Defender, self).__init__()
-            self.surf = pygame.image.load("E:\\blog_git\\codingbitz\\miniprojects\\game\\images\\jet.jpg")
+            self.surf = pygame.image.load("<IMG>")
             self.surf.set_colorkey((255, 255, 255), RLEACCEL)
             self.rect = self.surf.get_rect()
 
@@ -40,7 +40,7 @@ def main():
     class Enemy(pygame.sprite.Sprite):
         def __init__(self):
             super(Enemy, self).__init__()
-            self.surf = pygame.image.load("E:\\blog_git\\codingbitz\\miniprojects\\game\\images\\missile.jpg")
+            self.surf = pygame.image.load("<IMG>")
             self.surf.set_colorkey((255, 255, 255), RLEACCEL)
             self.rect = self.surf.get_rect(
                 center=(
@@ -59,7 +59,7 @@ def main():
     class Cloud(pygame.sprite.Sprite):
         def __init__(self):
             super(Cloud, self).__init__()
-            self.surf = pygame.image.load("E:\\blog_git\\codingbitz\\miniprojects\\game\\images\\cloud.jpg")
+            self.surf = pygame.image.load("<IMG>")
             self.surf.set_colorkey((0, 0, 0), RLEACCEL)
             # The starting position is randomly generated
             self.rect = self.surf.get_rect(
@@ -96,7 +96,7 @@ def main():
     all_sprites = pygame.sprite.Group()
     all_sprites.add(defender)
 
-    pygame.mixer.music.load("E:\\blog_git\\codingbitz\\miniprojects\\game\\sounds\\rain.mp3")
+    pygame.mixer.music.load("<MP3>")
     pygame.mixer.music.play(loops=-1)
     pygame.mixer.music.set_volume(0.4)
 
