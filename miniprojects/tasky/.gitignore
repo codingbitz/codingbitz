@@ -1,0 +1,10 @@
+# Default ignored files
+/shelf/
+/workspace.xml
+/.idea/
+/.ipynb_checkpoints/
+/__pycache__/
+/migrations/
+.tasky.db
+tasky/__pycache__/
+
