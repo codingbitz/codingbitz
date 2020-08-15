@@ -7,4 +7,8 @@
 /migrations/
 .tasky.db
 tasky/__pycache__/
-
+github.pub
+miniprojects/tasky/pkgtt/__pycache__/__init__.cpython-36.pyc
+miniprojects/tasky/pkgtt/__pycache__/models.cpython-36.pyc
+miniprojects/tasky/pkgtt/__pycache__/routes.cpython-36.pyc
+miniprojects/tasky/tasky.db
