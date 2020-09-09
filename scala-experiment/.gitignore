@@ -4,3 +4,6 @@
 /.idea/*
 *.iml
 /out/*
+/.metals/*
+/.vscode/*
+/src/target/*
