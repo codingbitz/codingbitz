@@ -1,4 +1,4 @@
-package learningjournal.scala.experiment
+package learningjournal.scala.experiments
 
 object HelloWorld {
 
