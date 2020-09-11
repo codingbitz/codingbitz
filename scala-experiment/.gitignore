@@ -6,4 +6,6 @@
 /out/*
 /.metals/*
 /.vscode/*
-/src/helloworld/target/*
+/helloworld/src/target/*
+/target/*
+/project/*
