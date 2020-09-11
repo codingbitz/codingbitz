@@ -7,5 +7,6 @@
 /.metals/*
 /.vscode/*
 /helloworld/target/*
+/helloworld/project/target/*
 /target/*
 /project/*
