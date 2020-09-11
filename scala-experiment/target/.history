@@ -1,0 +1,5 @@
+scala -version
+scala -version;
+;
+scala -version;
+exit
