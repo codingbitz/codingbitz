@@ -14,7 +14,7 @@ object HelloWorld {
     Logger.getLogger("org").setLevel(Level.ERROR)
     val conf = new SparkConf().setAppName("HelloWorld").setMaster("local[1]")
     val sc = new SparkContext(conf)
-    val fileTxt = "in/word_count.txt"
+    val fileTxt = "data/word_count.txt"
     val wordCounts = sc.textFile(fileTxt)
                        .flatMap(line => line.split(" "))
                        .filter(x => x.matches("[A-Za-z]+"))
@@ -28,7 +28,6 @@ object HelloWorld {
     var builder = new ListBuffer[String]()
     for ((word, count) <- wordCounts) builder+=(word + " : " + count)
     println(builder.toList)
-    //println(ListMap(builder.toList.sortBy{_._2}:_*))
     sc.stop()
   }
 
