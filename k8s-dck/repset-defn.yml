@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: myapp-rs
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      type: front-end
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+        - name: nginx-cntr
+          image: nginx
+# kubectl create -f repsetdefn.yml
+# kubectl get replicaset
+# kubectl get pods
+# kubectl delete replicaset myapp-rs
+# kubectl edit replicaset myapp-rs
+# kubectl describe replicaset myapp-rs
