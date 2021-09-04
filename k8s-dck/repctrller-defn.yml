@@ -25,3 +25,8 @@ spec:
 # kubectl delete replicationcontroller myapp-rc
 # kubectl edit replicationcontro1ller myapp-rc
 # kubectl describe replicationcontroller myapp-rc
+
+# Scale
+# kubectl replace -f repctrller-defn.yml
+# kubectl scale --replicas=5 -f repctrller-defn.yml
+# kubectl scale --replicas=4 replicationcontroller myapp-rc
