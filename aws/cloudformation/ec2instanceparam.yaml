@@ -1,0 +1,17 @@
+Parameters:
+  InstanceTypeParameter:
+    Type: String
+    Default: t2.micro
+    AllowedValues:
+      - t2.micro
+      - m1.small
+      - m1.large
+    Description: enter the instance you want, by default its t2.micro
+Resources:
+  MyInstance:
+    Type: AWS::EC2::Instance
+    Properties:
+      AvailabilityZone: us-east-1
+      ImageId: ami-xxxxxxxxxx
+      InstanceType:
+        Ref: InstanceTypeParameter
