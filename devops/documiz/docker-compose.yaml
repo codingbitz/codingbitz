@@ -1,0 +1,38 @@
+version: "3"
+
+services:
+  cbitzdb:
+    image: postgres:latest
+    restart: always
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: documize
+      POSTGRES_PASSWORD: Passw0rd
+      POSTGRES_DB: documize
+    volumes:
+       - cbitzdb-data:/var/lib/postgresql/data
+    networks:
+       - documizenet
+
+  app:
+    image: ubuntu:20.04
+    command: /bin/sh -c "apt-get -qq update && apt-get -qq install -y wget && wget https://documize.s3-eu-west-1.amazonaws.com/downloads/documize-enterprise-linux-amd64 && chmod 777 ./documize-enterprise-linux-amd64 && ./documize-enterprise-linux-amd64"
+    depends_on:
+      - cbitzdb
+    ports:
+      - 10001:10001
+    environment:
+      DOCUMIZEPORT: 10001
+      DOCUMIZEDB: host=cbitzdb port=5432 dbname=documize user=documize password=Passw0rd sslmode=disable
+      DOCUMIZEDBTYPE: postgresql
+      DOCUMIZESALT: hsk3Acndky8cdTNx3
+      DOCUMIZELOCATION: selfhost
+    networks:
+      - documizenet
+
+volumes:
+  cbitzdb-data:
+
+networks:
+  documizenet:
