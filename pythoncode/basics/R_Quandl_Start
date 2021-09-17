@@ -1,0 +1,130 @@
+library(Quandl)
+library(tidyverse)
+library(ggplot2)
+library(tidyquant)
+library(timetk)
+library(forcats)
+library(stringr)
+library(gganimate)
+library(plyr)
+library(stringr)
+library(gridExtra)
+
+#To-Do
+
+#Install Imagemagick from https://www.imagemagick.org/script/download.php#windows for convert to work in gganimate
+#set the path Sys.setenv(PATH = paste("C:/Program Files/ImageMagick/bin",Sys.getenv("PATH"), sep = ";"))
+#Restart R-Studio
+
+Quandl.api_key(Your API Key)
+
+## Reco stock download
+FORTIS = Quandl("NSE/FORTIS",collapse="monthly",start_date="2015-02-01",type="raw")
+LEEL= Quandl("NSE/LEEL",collapse="monthly",start_date="2015-02-01",type="raw")
+KRBL=Quandl("NSE/KRBL",collapse="monthly",start_date="2015-02-01",type="raw")
+LTFOODS=Quandl("NSE/DAAWAT",collapse="monthly",start_date="2015-02-01",type="raw")
+FILATEX=Quandl("NSE/FILATEX",collapse="monthly",start_date="2015-02-01",type="raw")
+PNB=Quandl("NSE/PNB",collapse="monthly",start_date="2015-02-01",type="raw")
+
+## Add stock name
+
+FORTIS<-cbind(FORTIS,Stock="")
+LEEL<-cbind(LEEL,Stock="")
+KRBL<-cbind(KRBL,Stock="")
+LTFOODS<-cbind(LTFOODS,Stock="")
+FILATEX<-cbind(FILATEX,Stock="")
+PNB<-cbind(PNB,Stock="")
+
+## Paste the stock name in stock column
+
+FORTIS$Stock<-paste(FORTIS$Stock,"FORTIS",sep="")
+LEEL$Stock<-paste(LEEL$Stock,"LEEL",sep="")
+KRBL$Stock<-paste(KRBL$Stock,"KRBL",sep="")
+LTFOODS$Stock<-paste(LTFOODS$Stock,"LTFOODS",sep="")
+FILATEX$Stock<-paste(FILATEX$Stock,"FILATEX",sep="")
+PNB$Stock<-paste(PNB$Stock,"PNB",sep="")
+
+#Integration
+
+Cons_Data<-rbind(FORTIS,LEEL,KRBL,LTFOODS,FILATEX,PNB)
+
+#Get the Y-M-D from the date column
+
+Cons_Data$Date<-as.character(Cons_Data$Date)
+list<-strsplit(Cons_Data$Date,"-")
+Cons_Date1<-ldply(list)
+colnames(Cons_Date1)<-c("Year","Month","Day")
+#Integrate the YMD with main
+Cons_Data<-cbind(Cons_Data,Cons_Date1)
+
+#Plotting of Monthly prices
+
+Cons_Data$'TTD_InLacs'<-Cons_Data$'Total Trade Quantity'/100000
+Cons_Data$Date<-as.Date(Cons_Data$Date)
+
+P<- ggplot(Cons_Data,aes(factor(Stock),Close,color=Stock,frame=Month)) +
+  geom_jitter(aes(size = Close, colour=Stock, alpha=.02)) +
+  labs(title = "Reco stocks monthly change", x = "Reco stocks", y= "Close Price")
+P1<-gganimate(P,'Price_Range.gif',ani.width=600,ani.height=400,interval=1)
+
+Cons_Data<-Cons_Data%>% tibble::as.tibble()%>% group_by(Stock)
+Cons_Data %>%
+  ggplot(aes(x = Date, y = Close, color = Stock)) +
+  geom_point() +
+  labs(title = "Monthly Close Price", x = "Month",y="Close Price") +
+  facet_wrap(~ Stock, ncol = 3, scale = "free_y") 
+
+## Traded Quantity vs Price
+
+z<-Cons_Data %>%
+  ggplot(aes(x = `TTD_InLacs`, y = Close, color = Stock,frame=Month)) +
+  geom_smooth(method='loess') +
+  xlim(0,400)+
+  labs(title = "MTQ vs Price", x = "TTD_InLacs",y="Close Price") +
+  facet_wrap(~ Stock, ncol = 3, scale = "free_y") 
+z
+
+z1<-gganimate(z,'MTQ_Price.gif',ani.width=600,ani.height=400,interval=0.7)
+
+#Finding the Density Distribution of Deviation of High Price from Open Price
+
+Cons_Data_High<-Cons_Data%>%mutate(Dev_High=High-Open)
+Cons_Data_Low<-Cons_Data%>%mutate(Dev_Low=Open-Low)
+
+## Computation of weekly average for high Price
+
+Cons_Data_High_Week <- Cons_Data_High %>%
+  tq_transmute(
+    select     = Dev_High,
+    mutate_fun = apply.weekly, 
+    FUN        = mean,
+    na.rm      = TRUE,
+    col_rename = "Dev_High_Mean"
+  )
+
+Cons_Data_Low_Week<-Cons_Data_Low%>%
+  tq_transmute(
+#https://www.rdocumentation.org/packages/tidyquant/versions/0.5.3/topics/tq_mutate    
+    select  = Dev_Low,
+    mutate_fun = apply.weekly,
+    FUN = mean,
+    na.rm = TRUE,
+#https://www.rdocumentation.org/packages/questionr/versions/0.6.2/topics/na.rm    
+    col_rename = "Dev_Low_Mean"
+  )
+
+#Plot the High/Low Price vs Open Price Weekly mean deviation
+
+High<-Cons_Data_High_Week%>%ggplot(aes(x=Dev_High_Mean,color=Stock))+
+  geom_dotplot(binwidth=0.50,aes(fill=Stock))+
+  xlim(0,10)+
+  labs(title="High Price vs Open Price Distri",x="Weekly Mean Deviation")+
+  facet_wrap(~Stock,ncol=3,scale="free_y")
+
+Low<-Cons_Data_Low_Week%>%ggplot(aes(x=Dev_Low_Mean,color=Stock))+
+  geom_dotplot(binwidth=0.50,aes(fill=Stock))+
+  xlim(0,10)+
+ labs(title="Low Price vs Open Price Distri",x="Weekly Mean Deviation")+
+  facet_wrap(~Stock,ncol=3,scale="free_y")
+
+grid.arrange(High,Low,ncol = 2, nrow = 1)

@@ -1,0 +1,48 @@
+# Linear Algebra - Vector
+class Vector(object):
+    def __init__(self,coordinates):
+        try:
+            if not coordinates:
+                raise ValueError
+            self.coordinates = tuple(coordinates)
+            self.dimension = len(coordinates)
+            
+        except ValueError:
+            raise ValueError("Coordinates must be non empty")
+            
+        except TypeError:
+            raise TypeError("Coordinates must be iterable")
+            
+    def plus(self,v):
+        new_coordinates =[x+y for x,y in zip(self.coordinates,v.coordinates)]
+#        new_coordinates =[]
+#        n= len(self.coordinates)
+#        for i in range(n):
+#            new_coordinates.append(self.coordinates[i] + v.coordinates[i])
+        return Vector(new_coordinates)
+    
+    def minus(self,v):
+        new_coordinates =[x-y for x,y in zip(self.coordinates,v.coordinates)]
+        return Vector(new_coordinates)
+    
+    def scalar_multi(self,c):
+        new_coordinates =[c*x for x in self.coordinates]
+        return Vector(new_coordinates)
+        
+    def __str__(self):
+        return 'Vector : {}' .format(self.coordinates)
+    
+    def __eq__(self,v):
+        return self.coordinates ==v.coordinates
+    
+v =Vector([1.111,-1.112])
+w =Vector([-1.113,1.114])
+print(v.plus(w))
+
+u =Vector([1.115,-1.116,1.117])
+t=1.118
+print(u.scalar_multi(t))
+    
+r =Vector([1.119,-1.120])
+s =Vector([-1.121,1.122])
+print(r.minus(s))
