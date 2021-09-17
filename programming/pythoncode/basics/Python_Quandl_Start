@@ -1,0 +1,21 @@
+import quandl
+import pandas as pd
+import matplotlib.pyplot as plt
+
+quandl.ApiConfig.api_key = <put your api key> #generate it from quandl website
+df1 = quandl.get("CMHC/HUDAA_ON",start_date="2008-02-23")
+on_df = pd.DataFrame(df1)
+
+#Line Chart
+
+on_df.plot(y=['All','Single','Row','Apartment','Semi-Detached'], kind="line")
+plt.title('Housing Under Construction Inventory by Dwelling Type (Provinces) - Ontario')
+plt.xlabel('\n Year')
+plt.ylabel('Housing Units')
+
+##For Stacked Bar
+
+on_df1=on_df[['Single','Row','Apartment','Semi-Detached']].groupby([on_df.index.year]).sum().plot(kind='bar',stacked=True)
+plt.xlabel('\n Year')
+plt.ylabel('Housing Units')
+plt.show()

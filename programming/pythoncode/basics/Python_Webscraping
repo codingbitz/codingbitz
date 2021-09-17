@@ -1,0 +1,42 @@
+#FirstCut
+#Web Scraping using python   
+
+#<!DOCTYPE html>  
+#<html>  
+#    <head>
+#    </head>
+#    <body>
+#        <h1> First Scraping </h1>
+#        <p> Hello World </p>
+#    <body>
+#</html>
+import requests
+from bs4 import BeautifulSoup
+import csv
+
+ 
+URL = "https://www.brainyquote.com/topics/inspirational"
+
+r = requests.get(URL)
+soup = BeautifulSoup(r.content, 'html5lib')
+ 
+quotes=[]  # a list to store quotes
+ 
+table = soup.find('div', attrs = {'id':'quotesList'})
+#'class':'m-brick grid-item boxy bqQt' 'id':'qpos_1_26'
+for b in table.findAll('div', attrs = {'class':'m-brick grid-item boxy bqQt'}):
+     quote = {}
+     if b.img is not None:
+         quote['quote'] = b.img['alt']
+         quote['image'] = b.img['src']
+         quote['theme'] = b.a['href'].split('_')[-1]
+         quote['author'] = b.img['alt'].split('-')[-1]
+         quotes.append(quote)
+         print(quotes)
+         
+filename = 'inspirational_quotes.csv'
+with open(filename, 'w') as f:
+    w = csv.DictWriter(f,['quote','image','theme','author'])
+    w.writeheader()
+    for quote in quotes:
+        w.writerow(quote)

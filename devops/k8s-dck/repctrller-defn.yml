@@ -1,0 +1,32 @@
+apiVersion: v1
+kind: ReplicationController
+metadata:
+  name: myapp-rc
+  labels:
+    app: myapp
+    type: front-end
+spec:
+  replicas: 3
+  selector:
+    app: myapp
+  template:
+    metadata:
+      name: myapp-pod
+      labels:
+        app: myapp
+        type: front-end
+    spec:
+      containers:
+        - name: nginx-cntr
+          image: nginx
+# kubectl create -f repctrller-defn.yml
+# kubectl get replicationcontroller
+# kubectl get pods
+# kubectl delete replicationcontroller myapp-rc
+# kubectl edit replicationcontro1ller myapp-rc
+# kubectl describe replicationcontroller myapp-rc
+
+# Scale
+# kubectl replace -f repctrller-defn.yml
+# kubectl scale --replicas=5 -f repctrller-defn.yml
+# kubectl scale --replicas=4 replicationcontroller myapp-rc
