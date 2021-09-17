@@ -1,7 +1,7 @@
 streamlit==0.69.2
 pandas
 numpy==1.18.5
-notebook==6.0.3
+notebook==6.4.1
 plotly==4.11.0
 matplotlib
 joblib
